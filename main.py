@@ -3,7 +3,7 @@ import moviepy.editor as mp
 import speech_recognition as sr
 
 #video uploading
-video = mp.VideoFileClip("Test_video1.mp4")
+video = mp.VideoFileClip("testvideo.mp4")
 audio_file = video.audio
 audio_file.write_audiofile("Test_video1.wav")
 
@@ -18,13 +18,12 @@ text = r.recognize_google(data)
 #dependencies for bot
 from sklearn import tree
 from sklearn.feature_extraction.text import CountVectorizer
-print("installed?")
 
 #reading text from image
 import easyocr
 reader = easyocr.Reader(['en'])
 result = reader.readtext('test2.jpg', detail = 0)
-r1 = ' '.join(str(e) for e in result).lower()
+r1 = ' '.join(str(e) for e in result).lower() #turning text into one string for the machine
 
 # Our existing set of positive texts to learn from
 # We already "know" that these are positive, so we
@@ -35,8 +34,8 @@ positive_texts = [
     "you are good",
     "he is good",
     "they love mary",
-		"I am happy",
-		"we are all here for a reason",
+    "I am happy",
+    "we are all here for a reason",
     "dream big",
     "live, laugh, love",
     "people are great",
@@ -64,15 +63,13 @@ negative_texts =  [
     "I am binge eating",
     "They went through sexual assault",
     "I feel so objectified",
-		"You are failing. You are stupid",
-		"All you do is sit around and be lazy",
-		"My friends are so annoying",
-		"You are an idiot",
-		"Self-harm will help me relieve anxiety",
-    "You will always be a slave so go cotton picking",
+    "You are failing. You are stupid",
+    "All you do is sit around and be lazy",
+    "My friends are so annoying",
+    "You are an idiot",
+    "Self-harm will help me relieve anxiety",
     "Sucide",
-		"Go commit Suicide",
-		"I hope you experience death right now"
+    "Commit Suicide"
 ]
 
 # These are the test texts. We pretend that we
@@ -83,7 +80,7 @@ test_texts = [
     "no literally gives me OCD",
     "You look ugly",
     "they are sooo good",
-	  "I love us",
+    "I love us",
     "I am so binge eating today",
     text, #video text
     r1
@@ -98,7 +95,7 @@ training_texts = negative_texts + positive_texts
 # When we feed these into the classifier, it'll use indices to match up
 # the texts, e.g. the first label in the list is "negative", so it'll learn
 # to associate the "negative" class with the first text.
-training_labels = ["negative"] * len(negative_texts) + ["positive"] * len(positive_texts)
+training_labels = ["possibly triggering"] * len(negative_texts) + ["positive"] * len(positive_texts)
 
 # Here we set up the vectorizer, the first main component of our machine learning solution.
 vectorizer = CountVectorizer()
@@ -114,7 +111,6 @@ vectorizer.fit(training_texts)
 # At this point, each text is represented by a list of numbers,
 # showing how often that word occurs in the text.
 training_vectors = vectorizer.transform(training_texts)
-
 
 # We'll do the same to our test texts. Each of these is a list
 # of numbers too after this step.
